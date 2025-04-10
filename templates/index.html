@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Virtual Mouse</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="glass-container">
+    <div class="loader-container" id="loader" style="display: none;">
+      <div class="loader"></div>
+      <h2 id="loader-text">Initializing Virtual Mouse...</h2>
+    </div>
+
+    <div class="main-content" id="main-content">
+      <h1>Welcome to Our Site</h1>
+      <h1>Virtual Mouse Control</h1>
+      <button onclick="startMouse()">Start Virtual Mouse</button>
+    </div>
+  </div>
+
+  <script>
+    function startMouse() {
+      document.getElementById("loader").style.display = "flex";
+      document.getElementById("main-content").style.display = "none";
+
+      fetch('/start_hand_tracking')
+        .then(response => {
+          if (response.ok) {
+            document.getElementById("loader-text").innerText = "Virtual Mouse is Active. Press ESC to stop.";
+            // Keep the loader showing until ESC is pressed
+          } else {
+            alert("Failed to start the virtual mouse.");
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("main-content").style.display = "block";
+          }
+        });
+    }
+  </script>
+</body>
+</html>
